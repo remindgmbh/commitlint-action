@@ -1,0 +1,1 @@
+# Commitlint GitHub Action
