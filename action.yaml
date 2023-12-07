@@ -3,20 +3,27 @@ name: Commitlint
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v4
+    -
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     -
       uses: actions/setup-node@v4
       with:
         node-version: 20
     -
+      shell: bash
       run: |
         npm install @commitlint/cli@18
         npm install @commitlint/config-conventional@18
     -
+      shell: bash
       run: echo "COMMITLINT=npx commitlint --config ${{ github.action_path }}/.commitlintrc --verbose" >> "$GITHUB_ENV"
     -
       if: github.event_name == 'push'
+      shell: bash
       run: $COMMITLINT --from ${{ github.event.push.after }} --to ${{ github.event.push.before }}
     -
       if: github.event_name == 'pull_request'
+      shell: bash
       run: $COMMITLINT --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }}
