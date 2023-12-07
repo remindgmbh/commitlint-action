@@ -1,5 +1,10 @@
 name: Commitlint
 
+inputs:
+  node-version:
+    required: false
+    default: 'lts/*'
+
 runs:
   using: composite
   steps:
@@ -10,7 +15,7 @@ runs:
     -
       uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: ${{ inputs.node-version }}
     -
       shell: bash
       run: npm install -g @commitlint/cli@18 @commitlint/config-conventional@18
