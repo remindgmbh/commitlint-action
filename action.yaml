@@ -13,9 +13,7 @@ runs:
         node-version: 20
     -
       shell: bash
-      run: |
-        npm install @commitlint/cli@18
-        npm install @commitlint/config-conventional@18
+      run: npm install -g @commitlint/cli@18 @commitlint/config-conventional@18
     -
       shell: bash
       run: echo "COMMITLINT=npx commitlint --config ${{ github.action_path }}/.commitlintrc --verbose" >> "$GITHUB_ENV"
