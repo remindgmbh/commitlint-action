@@ -1,32 +1,28 @@
 name: Commitlint
+description: Check commit message format using commitlint
 
 inputs:
   node-version:
+    description: Node version used for commitlint
     required: false
-    default: 'lts/*'
+    default: "lts/*"
 
 runs:
   using: composite
   steps:
-    -
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    -
-      uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-    -
-      shell: bash
-      run: npm install -g @commitlint/cli@18 @commitlint/config-conventional@18
-    -
-      shell: bash
-      run: echo "COMMITLINT=npx commitlint --config ${{ github.action_path }}/.commitlintrc --verbose" >> "$GITHUB_ENV"
-    -
-      if: github.event_name == 'push'
+    - shell: bash
+      run: npm --prefix ${{ github.action_path }} ci
+    - shell: bash
+      run: echo "COMMITLINT=npm exec --prefix ${{ github.action_path }} commitlint -- --config ${{ github.action_path }}/.commitlintrc --verbose" >> "$GITHUB_ENV"
+    - if: github.event_name == 'push'
       shell: bash
       run: $COMMITLINT --from ${{ github.event.push.after }} --to ${{ github.event.push.before }}
-    -
-      if: github.event_name == 'pull_request'
+    - if: github.event_name == 'pull_request'
       shell: bash
       run: $COMMITLINT --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }}
